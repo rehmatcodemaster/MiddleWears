@@ -1,7 +1,11 @@
 const express = require('express');   
+const fa =  require("fs"); // ✅ Corrected the import statement 
 const users = require('./MOCK_DATA.json'); // ✅ Removed extra space
 const app = express(); 
 const port = 3000;
+// Middleware for parsing URL-encoded data
+
+app.use(express.urlencoded({extended:false}));
 
 // Middleware (optional, for JSON parsing if POST/PUT are added later)
 app.use(express.json());
@@ -38,7 +42,17 @@ app.get("/api/users/:id", (req, res) => {
 });
 
 app.post("/api/users", (req, res) => {
-  // TODO : CREATE NEW USER 
+    const body = req.body;
+    // console.log("body", body);
+    users.push(body); // ✅ Corrected the push method to add the user to the users array 
+    fa.writeFile('./MOCK_DATA.json', JSON.stringify(users, null, 2), (err) => {
+        if (err) {
+            console.error("Error writing to file:", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+        console.log("Data written to file successfully");
+    });
+    // TODO : ADD THE USER TO THE USERS ARRAY)
     return  res.json({status :"pending"}); 
 });
 app.patch("/api/users/:id", (req, res) => {
