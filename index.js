@@ -6,6 +6,16 @@ const port = 3000;
 // Middleware for parsing URL-encoded data
 
 app.use(express.urlencoded({extended:false}));
+app.use((req, res, next) => {
+  console.log('HELLO FROM MIDDLEWARE');
+  // res.json({ msg: "HELLO FROM MIDDLEWARE" }); // Only use if you want to stop here
+  next(); // Passes control to the next middleware or route
+});
+ app.use((req, res, next) => {
+  console.log('HELLO FROM MIDDLEWARE');
+  // res.json({ msg: "HELLO FROM MIDDLEWARE" }); // Only use if you want to stop here
+  return res.end("rehmat ")
+});
 
 // Middleware (optional, for JSON parsing if POST/PUT are added later)
 app.use(express.json());
